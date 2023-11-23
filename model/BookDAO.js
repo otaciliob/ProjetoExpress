@@ -11,7 +11,10 @@ module.exports = {
     busca: async ()=>{
         return await BookModel.findByPk(id);
     },
-    alterar: async(task)=>{
+    alterar: async(book)=>{
         return await BookModel.update(book,{where: book.id});
+    },
+    apagar: (book)=>{
+        return BookModel.destroy({where: book.id})
     }
 }

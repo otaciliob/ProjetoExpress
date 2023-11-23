@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 
-var TaskModel = require('../model/Taskdb.js')
+var TaskModel = require('../model/TaskDAO.js')
 
 let getTask = (req, res, next) => {
     let {id} = req.params
