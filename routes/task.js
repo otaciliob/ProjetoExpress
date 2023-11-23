@@ -1,11 +1,11 @@
 var express = require('express')
 var router = express.Router()
 
-var TaskModel = require('../model/Tasks')
+var TaskModel = require('../model/Taskdb.js')
 
 let getTask = (req, res, next) => {
     let {id} = req.params
-    let task = TaskModel.getElementById(id)
+    let task = TaskModel.busca(id)
     if (task == null) {
         return res.status(404).json({status: false, error: "Id invalido"})
     }
@@ -26,7 +26,7 @@ let validaNome = (req, res, next) => {
 }
 
 router.get("/", (req, res) => {
-    res.json({status: true, tasks: TaskModel.list()})
+    res.json({status: true, tasks: TaskModel.lista()})
 })
 
 router.get("/:id", getTask, (req, res) => {
@@ -34,15 +34,15 @@ router.get("/:id", getTask, (req, res) => {
 })
 
 router.post("/", validaNome, (req, res) => {
-    res.json({status: true, task: TaskModel.new(req.nome)})
+    res.json({status: true, task: TaskModel.novo(req.nome)})
 })
 
 router.put("/:id", validaNome, getTask, (req, res) => {
-    res.json({status: true, task: TaskModel.update(req.task.id, req.nome)})
+    res.json({status: true, task: TaskModel.alterar(req.task)})
 })
 
 router.delete("/:id", getTask, (req, res) => {
-    res.json({status: true, oldtask: TaskModel.delete(req.task.id)})
+    res.json({status: true, oldtask: TaskModel.apagar(req.task)})
 })
 
 module.exports = router

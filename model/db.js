@@ -45,8 +45,27 @@ const BookModel = sequelize.define('Book',{
         type: DataTypes.STRING,
         allowNull: false
     },
+    autor: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     dataPublicacao: {
         type: DataTypes.DATE,
+        allowNull: false
+    },
+    unidades: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+})
+const PublisherModel = sequelize.define('Publisher',{
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true, 
+        primaryKey: true
+    },
+    nome: {
+        type: DataTypes.STRING,
         allowNull: false
     }
 })
@@ -55,5 +74,6 @@ module.exports = {
     sequelize: sequelize,
     TaskModel: TaskModel,
     UserModel: UserModel,
-    BookModel: BookModel
+    BookModel: BookModel,
+    PublisherModel: PublisherModel
 }
