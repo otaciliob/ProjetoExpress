@@ -3,46 +3,46 @@ var router = express.Router()
 
 var TaskModel = require('../model/TaskDAO.js')
 
-let getTask = (req, res, next) => {
+let getTarefa = async(req, res, next) => {
     let {id} = req.params
-    let task = TaskModel.busca(id)
+    let task = await TaskModel.busca(id)
     if (task == null) {
         return res.status(404).json({status: false, error: "Id invalido"})
     }
-    req.task = task
+    req.taskid = task
     next()
 }   
 
-let validaNome = (req, res, next) => {
-    let {nome} = req.body
-    if (nome == undefined || nome == "") {
+let validaTarefa = (req, res, next) => {
+    let {tarefa} = req.body
+    if (tarefa == undefined || tarefa == "") {
         return res.status(400).json({status: false, error:"Nome nao informado"})
     }
-    if (nome.length < 5) {
+    if (tarefa.length < 5) {
         return res.status(400).json({status: false, error:"O nome da tarefa precisa ter mais do que 5 caracteres"})
     }
-    req.nome = nome.toUpperCase()
+    req.tarefa = tarefa.toUpperCase()
     next()
 }
-
-router.get("/", (req, res) => {
-    res.json({status: true, tasks: TaskModel.lista()})
+//listar todos
+router.get("/", async(req, res) => {
+    res.json({status: true, tasks: await TaskModel.lista()});
 })
-
-router.get("/:id", getTask, (req, res) => {
-    res.json({status: true, task: req.task})
+//buscar pelo ID
+router.get("/:id", getTarefa, (req, res) => {
+    res.json({status: true, task: req.taskid})
 })
-
-router.post("/", validaNome, (req, res) => {
-    res.json({status: true, task: TaskModel.novo(req.nome)})
+//criar novo
+router.post("/", validaTarefa, (req, res) => {
+    res.json({status: true, task: TaskModel.novo(req.tarefa)})
 })
-
-router.put("/:id", validaNome, getTask, (req, res) => {
-    res.json({status: true, task: TaskModel.alterar(req.task)})
+//alterar
+router.put("/:id", validaTarefa, getTarefa, async(req, res) => {
+    res.json({status: true, task: await TaskModel.alterar(req.taskid,req.body)})
 })
-
-router.delete("/:id", getTask, (req, res) => {
-    res.json({status: true, oldtask: TaskModel.apagar(req.task)})
+//deletar
+router.delete("/:id", getTarefa, async(req, res) => {
+    res.json({status: true, oldtask: await TaskModel.apagar(req.taskid)})
 })
 
 module.exports = router

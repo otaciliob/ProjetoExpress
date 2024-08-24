@@ -1,8 +1,8 @@
 const {TaskModel} = require('./db');
 
 module.exports = {
-    novo: async(tarefa) =>{
-        return await TaskModel.create({ tarefa: tarefa });
+    novo: async(task) =>{
+        return await TaskModel.create({ tarefa: task });
     },
     lista: async ()=>{
         return await TaskModel.findAll();
@@ -10,10 +10,10 @@ module.exports = {
     busca: async (id)=>{
         return await TaskModel.findByPk(id);
     },
-    alterar: async(task)=>{
-        return await TaskModel.update(task,{where: task.id});
+    alterar: async(id,tarefa)=>{
+        return await TaskModel.update(tarefa,{ where:{id: id} } );
     },
-    apagar: (task)=>{
-        return TaskModel.destroy({where: task.id})
+    apagar: async(task)=>{
+        return await TaskModel.destroy({where: {id: task.id}})
     }
 }
